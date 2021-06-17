@@ -35,6 +35,47 @@
 
 - yield 是什么，说个使用场景 yield
 
+  1. yield 的设计理念：生成器提供了一种更容易的方法来实现简单的[对象迭代](https://www.php.net/manual/zh/language.oop5.iterations.php)，相比较定义类实现 **Iterator** 接口的方式，性能开销和复杂性大大降低。
+  2. 任何包含 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 关键字的函数（类的方法）都是一个生成器函数。
+
+  例一
+
+  ```php
+  function gen_one_to_three()
+  {
+    for ($i = 1; $i <= 3; $i++) {
+        yield $i;
+        yield $i+1;
+    }
+  }
+  
+  $generator = gen_one_to_three();
+  
+  echo get_class($generator) . PHP_EOL;//Generator
+  
+  foreach ($generator as $value) {
+      echo "$value\n";
+  }
+  //1
+  //2
+  //2
+  //3
+  //3
+  //4
+  ```
+
+  根据 例一，我们发现 函数内的yield可以有多个 ，foreach会依次 触发每一个 yield 
+
+  yield 跟 return 在函数中的区别？
+
+  return 后 函数结束，而 迭代器 则是执行到 某一个 yield 然后停下来响应，下次还能继续从这个 地方继续执行。
+
+  return 会直接中断 yield 迭代器。
+
+  
+
+  
+
 - PSR 是什么，PSR-1, 2, 4, 7
 
 - 如何获取客户端 IP 和服务端 IP 地址
@@ -61,6 +102,7 @@
 - 字符串、数字比较大小的原理，注意 0 开头的8进制、0x 开头16进制
 
   - 字符串比较大小，从左(高位)至右，逐个字符 ASCII 比较
+  
 - BOM 头是什么，怎么除去
 
   - `0xEF`,`0xBB`,`0xBF`
